@@ -6,13 +6,14 @@ import logging
 import json
 import time
 
+# Extends the tornado app, by including DB creation/initialization when App is created
 class App(tornado.web.Application):
 
     def __init__(self, handlers, **kwargs):
         super().__init__(handlers, **kwargs)
 
         # Initialising db connection
-        self.db = sqlite3.connect("listings.db")
+        self.db = sqlite3.connect("databases/listings.db")
         self.db.row_factory = sqlite3.Row
         self.init_db()
 
@@ -203,5 +204,9 @@ if __name__ == "__main__":
     app.listen(options.port)
     logging.info("Starting listing service. PORT: {}, DEBUG: {}".format(options.port, options.debug))
 
-    # Start event loop
-    tornado.ioloop.IOLoop.instance().start()
+    try:
+        # Start event loop in a Try/Except to kill the service when SIGINT is caught
+        tornado.ioloop.IOLoop.instance().start()
+    except KeyboardInterrupt:
+        tornado.ioloop.IOLoop.instance().stop()
+        print("Exit sucess")
