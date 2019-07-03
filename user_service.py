@@ -114,6 +114,31 @@ class UsersHandler(BaseHandler):
         self.write_json({"result": True, "user": user})
 
 
+# /users/{id}
+class UserHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self, id=None):
+        # Building select statement filtering for selected user
+        select_stmt = "SELECT * FROM users WHERE id=?"
+
+        cursor = self.application.db.cursor()
+        results = cursor.execute(select_stmt, (id,))
+
+        users = []
+        for row in results:
+            fields = ["id", "name", "created_at", "updated_at"]
+            user = {
+                field: row[field] for field in fields
+            }
+            users.append(user)
+
+        # Send back results, if user does not exist, send back as error
+        if len(users):
+            self.write_json({"result": True, "users": users})
+        else:
+            self.write_json({"error": True, "users": None})
+
+
 # /users/ping
 class PingHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
@@ -124,7 +149,7 @@ def make_app(options):
     return App([
         (r"/users/ping", PingHandler),
         (r"/users", UsersHandler),
-        # (r"/users/{id}", PingHandler)
+        (r"/users/([^/]+)?", UserHandler)
     ], debug=options.debug)
 
 if __name__ == "__main__":
