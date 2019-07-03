@@ -81,6 +81,7 @@ class UsersHandler(BaseHandler):
 
     @tornado.gen.coroutine
     def post(self):
+        print(self.request.body)
         # Collecting required params
         name = self.get_argument("name")
 
