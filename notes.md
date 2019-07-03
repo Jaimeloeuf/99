@@ -11,5 +11,10 @@ LS -> 6001
 US -> 6002
 
 I did not deploy all the services to the same hostname. Instead they are deployed to the same "host" but on different ports.  
-All the SQLite databases files are created in the "database/" directory in the root directory.  
-Although not recommended in actual production code, since this is a demo, the Database files are also included in the remote repo.  
+
+## Directory Structure
+- /src
+    - Directory to house all the source code files.
+- /databases
+    - All the SQLite databases files are created in the "database/" directory in the root directory.
+    - Although not recommended in actual production code, since this is a demo, the Database files are also included in the remote repo.
