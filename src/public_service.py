@@ -77,6 +77,33 @@ class ListingsHandler(BaseHandler):
         self.write(res)
         
 
+# /public-api/users
+class UsersHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def post(self):
+        # URL encoded  form data to be submitted, but json is received
+
+        # Convert the JSON body for name into a name query
+        # name = "name=" + json.loads(self.request.body.decode())['name']
+        name = json.loads(self.request.body.decode())
+
+        import urllib
+        name = urllib.parse.urlencode(name)
+
+        # The URL is hardcoded, this should be fed in or taken from a "service discovery" service
+        req = HTTPRequest(
+            url="http://localhost:6002/users",
+            method="POST",
+            body=name
+        )
+
+        res = yield async_fetch(req)
+
+        # Send back the response as json
+        self.set_header("Content-Type", "application/json")
+        self.write(res)
+
+
 # /public-api/ping
 class PingHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
