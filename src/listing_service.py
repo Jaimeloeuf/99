@@ -41,6 +41,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 # /listings
 class ListingsHandler(BaseHandler):
+    """ Get All Listings based on parameters endpoint """
     @tornado.gen.coroutine
     def get(self):
         # Parsing pagination params
@@ -97,6 +98,7 @@ class ListingsHandler(BaseHandler):
 
         self.write_json({"result": True, "listings": listings})
 
+    """ Create Listing endpoint """
     @tornado.gen.coroutine
     def post(self):
         # Collecting required params
@@ -175,6 +177,7 @@ class ListingsHandler(BaseHandler):
 
 # /listings/ping
 class PingHandler(tornado.web.RequestHandler):
+    """ Standard ping based status endpoint """
     @tornado.gen.coroutine
     def get(self):
         self.write("pong!")

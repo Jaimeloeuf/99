@@ -26,6 +26,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 # /public-api/listings
 class ListingsHandler(BaseHandler):
+    """ Get all listings endpoint """
     @tornado.gen.coroutine
     def get(self):
         # Parsing pagination params
@@ -76,7 +77,7 @@ class ListingsHandler(BaseHandler):
         self.write(res)
         
 
-    """ Create Listing Endpoint """
+    """ Create Listing endpoint """
     @tornado.gen.coroutine
     def post(self):
         # URL encoded  form data to be submitted, but json is received
@@ -101,6 +102,7 @@ class ListingsHandler(BaseHandler):
 
 # /public-api/users
 class UsersHandler(BaseHandler):
+    """ Create User endpoint """
     @tornado.gen.coroutine
     def post(self):
         # URL encoded  form data to be submitted, but json is received
@@ -124,6 +126,7 @@ class UsersHandler(BaseHandler):
 
 # /public-api/ping
 class PingHandler(tornado.web.RequestHandler):
+    """ Standard ping based status endpoint """
     @tornado.gen.coroutine
     def get(self):
         self.write("pong!")

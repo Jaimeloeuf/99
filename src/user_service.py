@@ -38,6 +38,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 # /users
 class UsersHandler(BaseHandler):
+    """ Get All Users based on parameters endpoint """
     @tornado.gen.coroutine
     def get(self):
         # Parsing pagination params
@@ -79,9 +80,9 @@ class UsersHandler(BaseHandler):
 
         self.write_json({"result": True, "users": users})
 
+    """ Create User endpoint """
     @tornado.gen.coroutine
     def post(self):
-        print(self.request.body)
         # Collecting required params
         name = self.get_argument("name")
 
@@ -117,6 +118,7 @@ class UsersHandler(BaseHandler):
 
 # /users/{id}
 class UserHandler(BaseHandler):
+    """ Get specific user endpoint """
     @tornado.gen.coroutine
     def get(self, id=None):
         # Building select statement filtering for selected user
@@ -142,6 +144,7 @@ class UserHandler(BaseHandler):
 
 # /users/ping
 class PingHandler(tornado.web.RequestHandler):
+    """ Standard ping based status endpoint """
     @tornado.gen.coroutine
     def get(self):
         self.write("pong!")
