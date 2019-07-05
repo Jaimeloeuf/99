@@ -84,11 +84,7 @@ class UsersHandler(BaseHandler):
         # URL encoded  form data to be submitted, but json is received
 
         # Convert the JSON body for name into a name query
-        # name = "name=" + json.loads(self.request.body.decode())['name']
-        name = json.loads(self.request.body.decode())
-
-        import urllib
-        name = urllib.parse.urlencode(name)
+        name = "name=" + json.loads(self.request.body.decode())['name']
 
         # The URL is hardcoded, this should be fed in or taken from a "service discovery" service
         req = HTTPRequest(
