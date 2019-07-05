@@ -2,10 +2,9 @@ import tornado.web
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 import tornado.log
 import tornado.options
-import sqlite3
+import urllib
 import logging
 import json
-import time
 
 
 async def async_fetch(req):
@@ -84,7 +83,7 @@ class UsersHandler(BaseHandler):
         # URL encoded  form data to be submitted, but json is received
 
         # Convert the JSON body for name into a name query
-        name = "name=" + json.loads(self.request.body.decode())['name']
+        name = "name=" + json.loads(self.request.body)['name']
 
         # The URL is hardcoded, this should be fed in or taken from a "service discovery" service
         req = HTTPRequest(
