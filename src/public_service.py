@@ -25,6 +25,58 @@ class BaseHandler(tornado.web.RequestHandler):
         self.write(json.dumps(obj))
 
 
+# /public-api/listings
+class ListingsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        # Parsing pagination params
+        page_num = self.get_argument("page_num", 1)
+        page_size = self.get_argument("page_size", 10)
+
+        arguements = []
+
+        try:
+            page_num = int(page_num)
+            arguements.append("page_num=" + str(page_num))
+        except:
+            logging.exception("Error while parsing page_num: {}".format(page_num))
+            self.write_json({"result": False, "errors": "invalid page_num"}, status_code=400)
+            return
+
+        try:
+            page_size = int(page_size)
+            arguements.append("page_size=" + str(page_size))
+        except:
+            logging.exception("Error while parsing page_size: {}".format(page_size))
+            self.write_json({"result": False, "errors": "invalid page_size"}, status_code=400)
+            return
+
+        # Parsing user_id param
+        user_id = self.get_argument("user_id", None)
+        if user_id is not None:
+            try:
+                user_id = int(user_id)
+                arguements.append("user_id=" + str(user_id))
+            except:
+                self.write_json({"result": False, "errors": "invalid user_id"}, status_code=400)
+                return
+
+        # The URL is hardcoded, this should be fed in or taken from a "service discovery" service
+        url = "http://localhost:6001/listings"
+
+        if len(arguements) > 0:
+            url += "?" + "&".join(arguements)
+            print(url)
+
+        req = HTTPRequest(url)
+
+        res = yield async_fetch(req)
+
+        # Send back the response as json
+        self.set_header("Content-Type", "application/json")
+        self.write(res)
+        
+
 # /public-api/ping
 class PingHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
