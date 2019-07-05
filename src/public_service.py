@@ -76,6 +76,29 @@ class ListingsHandler(BaseHandler):
         self.write(res)
         
 
+    """ Create Listing Endpoint """
+    @tornado.gen.coroutine
+    def post(self):
+        # URL encoded  form data to be submitted, but json is received
+
+        # Convert JSON body into query using the urllib library
+        req_body = json.loads(self.request.body)
+        req_body = urllib.parse.urlencode(req_body)
+
+        # The URL is hardcoded, this should be fed in or taken from a "service discovery" service
+        req = HTTPRequest(
+            url="http://localhost:6001/listings",
+            method="POST",
+            body=req_body
+        )
+
+        res = yield async_fetch(req)
+
+        # Send back the response as json
+        self.set_header("Content-Type", "application/json")
+        self.write(res)
+
+
 # /public-api/users
 class UsersHandler(BaseHandler):
     @tornado.gen.coroutine
