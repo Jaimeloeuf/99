@@ -13,7 +13,7 @@ class App(tornado.web.Application):
         super().__init__(handlers, **kwargs)
 
         # Initialising db connection
-        self.db = sqlite3.connect("databases/listings.db")
+        self.db = sqlite3.connect("db/listings.db")
         self.db.row_factory = sqlite3.Row
         self.init_db()
 
