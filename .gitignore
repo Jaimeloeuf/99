@@ -2,4 +2,5 @@
 env/
 
 # Ignore SQLite db files
-*.db
+# Allow DB files since this is just a demo, and files are needed to create the directory in the remote repo
+# *.db
